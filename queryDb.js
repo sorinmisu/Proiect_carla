@@ -13,10 +13,13 @@ const dbConfig = {
 
 
 
-// Define a route to serve the HTML page
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-  });
+// Define a route to serve the Catei.html page and Catei.css file
+app.use(express.static(__dirname + '/'));
+
+
+// app.get('/', (req, res) => {
+//     res.sendFile(__dirname + '/Catei.html');
+//   });
   
   app.get('/getData', async (req, res) => {
     try {
