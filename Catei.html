@@ -8,8 +8,7 @@
     <meta name="description" content="">
     <meta name="page_type" content="np-template-header-footer-from-plugin">
     <title>Căței</title>
-    <link rel="stylesheet" href="nicepage.css" media="screen">
-    <link rel="stylesheet" href="Catei.css" media="screen">
+    
     <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
     <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
     <meta name="generator" content="Nicepage 3.10.2, nicepage.com">
@@ -30,6 +29,41 @@
     <meta name="theme-color" content="#478ac9">
     <link rel="canonical" href="index.html">
     <meta property="og:url" content="index.html">
+
+    <style>
+        #data-container{
+            background-color: bisque;
+            position: relative;
+        }
+
+        /*dog-image is relative to dog-name*/
+        #data-container .dog-name {
+            position: relative;
+            top: 50%;
+            left: calc(5% + 50);
+            /* transform: translate(-50%, -50%); */
+            background-color: white;
+            width: 20%;
+            height: 30em;
+            scale: 0.9;
+        }
+
+        /*center dog-image relative to dog-name*/
+        .dog-name .dog-image {
+            position: relative;
+            top: 50%;
+            left: 50%;
+            /* transform: translate(-50%, -50%); */
+            width: 25%;
+            height: 25%;
+            scale: 1;
+        }
+
+
+
+      </style>
+
+
 </head>
 
 <body class="u-body">
@@ -273,24 +307,62 @@
                 target="_blank">Formular adopție</a>
         </div>
     </section>
+
+
+    <section>
+
+        <div id="data-container">
+
+        </div>
+
+    </section>
+
+
     <section>
         <ul id="data-list"></ul>
 
         <script>
             const dataList = document.getElementById('data-list');
-
+            const dataContainer = document.getElementById('data-container');
+            let counter = 0;
             // Make a fetch request to your server's /getData endpoint
             fetch('/getData') // Assumes your server is running on localhost:3000
                 .then(response => response.json())
                 .then(data => {
                     // Process and display the data
                     data.forEach(item => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = JSON.stringify(item); // Display the data in the console
-                        dataList.appendChild(listItem);
+
+                        if (counter == 4) {
+
+                        }
+
+                        // Create and populate elements within the section
+                        const nameElementDiv = document.createElement('div');
+                        nameElementDiv.className = 'dog-name';
+
+                        const nameElementName = document.createElement('p');
+                        nameElementName.textContent = item.id;
+
+                        const nameElementImg = document.createElement('img');
+                        nameElementImg.className = 'dog-image'//'dog-image';
+                        nameElementImg.src = 'images\\'+item.locatie_poza;
+
+                        // Append elements to the section
+                        nameElementDiv.appendChild(nameElementName);
+                        nameElementDiv.appendChild(nameElementImg);
+                        // Append the section to the container
+                        dataContainer.appendChild(nameElementDiv);
+
+
+                        counter++;
+
+
+                        // const listItem = document.createElement('li');
+                        // listItem.textContent = JSON.stringify(item); // Display the data in the console
+                        // dataList.appendChild(listItem);
 
                         // Log the data to the console
-                        console.log(item);
+                        // console.log(item);
                     });
                 })
                 .catch(error => {
@@ -298,8 +370,8 @@
                     dataList.textContent = 'Error fetching data.';
                 });
         </script>
-
     </section>
+
 
     <footer class="u-clearfix u-footer u-image u-image-tiles u-shading u-footer" id="sec-ecd9" data-image-width="564"
         data-image-height="732">
@@ -320,6 +392,8 @@
             <h1 class="u-text u-text-2">Dogs</h1>
             <h1 class="u-text u-text-palette-3-light-3 u-text-3">Ranch</h1>
         </div>
+    <link rel="stylesheet" href="nicepage.css" media="screen">
+    <link rel="stylesheet" href="Catei.css" media="screen">
     </footer>
 </body>
 
