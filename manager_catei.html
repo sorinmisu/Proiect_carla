@@ -198,11 +198,35 @@
                         nameCell.textContent = item.nume_caine;
 
                         editLink.textContent = 'Edit';
-                        editLink.href = `/edit/${item.id}`;
+                        editLink.href = "edit_catei.html?id=" + item.id;
                         editCell.appendChild(editLink);
 
                         removeLink.textContent = 'Remove';
-                        removeLink.href = `/remove/${item.id}`;
+                        removeLink.href = `/deleteData/${item.id}`;
+                        removeLink.setAttribute('data-id', item.id);
+                        removeLink.addEventListener('click', deleteEntry);
+
+                        async function deleteEntry(event) {
+                            event.preventDefault(); // Prevent the link from navigating to a new page
+
+                            const confirmed = confirm('Are you sure you want to delete this entry?');
+                            if (confirmed) {
+                                const id = event.target.getAttribute('data-id');
+                                try {
+                                    const response = await fetch(`/deleteData/${id}`, { method: 'DELETE' });
+                                    if (response.ok) {
+                                        // Reload the page to update the table
+                                        location.reload();
+                                    } else {
+                                        throw new Error(data.error);
+                                    }
+                                } catch (error) {
+                                    console.error('Error deleting entry:', error);
+                                    alert('Failed to delete entry');
+                                }
+                            }
+                        }
+
                         removeCell.appendChild(removeLink);
 
                         row.appendChild(idCell);
@@ -217,6 +241,9 @@
                     console.error('Error fetching data:', error);
                     dataList.textContent = 'Error fetching data.';
                 });
+
+
+
         </script>
     </section>
 
