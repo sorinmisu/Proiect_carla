@@ -55,12 +55,51 @@ app.delete('/deleteData/:id', async (req, res) => {
 });
 
 app.put('/updateData/:id', async (req, res) => {
-  //This function is called from a html button event
-  // i want to print in the console the headers of the PUT method
-  console.log(req.body);
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    let updateQuery;
+    let result;
+    //check if req.body.locatie_poza is null
+    if(req.body.locatie_poza == ''){
+      updateQuery = 'UPDATE catei SET nume_caine = ?, data_nasterii = ?, castrat = ?, talie = ?, x_pisici = ?, x_caini = ?, data_plecare = ?, gen = ? WHERE id = ?';
+      [result] = await connection.execute(updateQuery, [req.body.nume_caine, req.body.data_nasterii, req.body.castrat, req.body.talie, req.body.x_pisici, req.body.x_caini, req.body.data_plecare, req.body.gen, req.params.id]);
+    }
+    else
+    {
+      updateQuery = 'UPDATE catei SET nume_caine = ?, data_nasterii = ?, castrat = ?, talie = ?, x_pisici = ?, x_caini = ?, data_plecare = ?,locatie_poza = ?, gen = ? WHERE id = ?';
+      [result] = await connection.execute(updateQuery, [req.body.nume_caine, req.body.data_nasterii, req.body.castrat, req.body.talie, req.body.x_pisici, req.body.x_caini, req.body.data_plecare,req.body.locatie_poza, req.body.gen, req.params.id]);
+    }
+
+    connection.end();
+
+    if (result.affectedRows === 0) {
+      // If no rows were affected, the ID was not found
+      res.status(404).json({ error: 'ID not found' });
+    } else {
+      // Send a success response
+      res.json({ success: true });
+    }
+  } catch (error) {
+    console.error('Error updating data:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
 
 
-    
+//make a function to insert data into the database
+app.post('/insertData', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const insertQuery = 'INSERT INTO catei (nume_caine, data_nasterii, castrat, talie, x_pisici, x_caini, data_plecare,locatie_poza, gen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await connection.execute(insertQuery, [req.body.nume_caine, req.body.data_nasterii, req.body.castrat, req.body.talie, req.body.x_pisici, req.body.x_caini, req.body.data_plecare, req.body.locatie_poza, req.body.gen]);
+    connection.end();
+
+    // Send a success response
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error inserting data:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
 });
 
 

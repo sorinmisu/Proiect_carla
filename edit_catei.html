@@ -227,7 +227,18 @@
 
                             document.getElementById('name-10f6').value = dateString;
                             document.getElementById('castrat').checked = item.castrat;
-                            document.getElementById('talie').value = item.talie;
+
+                            if (item.talie == 1) {
+                                document.getElementById('talie').value = "mica";
+                            }
+                            else if (item.talie == 2) {
+                                document.getElementById('talie').value = "medie";
+                            }
+                            else if (item.talie == 3) {
+                                document.getElementById('talie').value = "mare";
+                            }
+
+
                             document.getElementById('comp_pisici').checked = item.x_pisici;
                             document.getElementById('comp_caini').checked = item.x_caini;
 
@@ -238,8 +249,13 @@
                             var dateString = year + "-" + month + "-" + day;
 
                             document.getElementById('available_date').value = dateString;
-                            document.getElementById('gen').value = item.gen;
 
+                            if (item.gen == 0) {
+                                document.getElementById('gen').value = "mascul";
+                            }
+                            else if (item.gen == 1) {
+                                document.getElementById('gen').value = "femela";
+                            }
                         }
 
                     });
@@ -309,7 +325,7 @@
                                     <label for="comp_pisici" class="u-form-control-hidden u-label">Compatibilitate
                                         pisici</label>
                                     <label>
-                                        <span>Compatibilitate pisici</span>
+                                        <span>Accepta pisici</span>
                                         <input type="checkbox" id="comp_pisici" name="comp_pisici"
                                             class="u-border-2 u-border-grey-75 u-border-no-left u-border-no-right u-border-no-top u-input">
                                     </label>
@@ -320,7 +336,7 @@
                                     <label for="comp_caini" class="u-form-control-hidden u-label">Compatibilitate
                                         caini</label>
                                     <label>
-                                        <span>Compatibilitate caini</span>
+                                        <span>Accepta caini</span>
                                         <input type="checkbox" id="comp_caini" name="comp_caini"
                                             class="u-border-2 u-border-grey-75 u-border-no-left u-border-no-right u-border-no-top u-input">
                                     </label>
@@ -386,12 +402,73 @@
 
                                     const button = document.querySelector('.u-align-center.u-form-group.u-form-submit input[type="submit"]');
 
+
+
+
                                     button.addEventListener('click', async (event) => {
                                         event.preventDefault();
 
-                                        const id = 1; // Replace with the ID of the record to update
+                                        var poza = document.getElementById('poza').value;
+                                        poza = poza.replace(/^.*[\\\/]/, '');
+
+                                        var talie_convert = document.getElementById('talie').value;
+
+                                        if (talie_convert == "mica") {
+                                            talie_convert = 1;
+                                        }
+                                        else if (talie_convert == "medie") {
+                                            talie_convert = 2;
+                                        }
+                                        else if (talie_convert == "mare") {
+                                            talie_convert = 3;
+                                        }
+
+                                        var gen_convert = document.getElementById('gen').value;
+
+                                        if (gen_convert == "mascul") {
+                                            gen_convert = 0;
+                                        }
+                                        else if (gen_convert == "femela") {
+                                            gen_convert = 1;
+                                        }
+
+                                        //convert document.getElementById('castrat').checked to a variable 0 or 1
+                                        var castrat_convert = document.getElementById('castrat').checked;
+                                        if (castrat_convert == true) {
+                                            castrat_convert = 1;
+                                        }
+                                        else {
+                                            castrat_convert = 0;
+                                        }
+
+                                        var comp_pisici_convert = document.getElementById('comp_pisici').checked;
+                                        if (comp_pisici_convert == true) {
+                                            comp_pisici_convert = 1;
+                                        }
+                                        else {
+                                            comp_pisici_convert = 0;
+                                        }
+
+                                        var comp_caini_convert = document.getElementById('comp_caini').checked;
+                                        if (comp_caini_convert == true) {
+                                            comp_caini_convert = 1;
+                                        }
+                                        else {
+                                            comp_caini_convert = 0;
+                                        }
+
+
+                                        const id = urlParams.get('id');
                                         const data = {
-                                            'test': 'Carla'
+                                            'nume_caine': document.getElementById('name-10f5').value,
+                                            'data_nasterii': document.getElementById('name-10f6').value,
+                                            'castrat': castrat_convert,
+                                            'talie': talie_convert,
+                                            'x_pisici': comp_pisici_convert,
+                                            'x_caini': comp_caini_convert,
+                                            'data_plecare': document.getElementById('available_date').value,
+                                            'locatie_poza': poza,
+                                            'gen': gen_convert
                                         }
 
                                         try {
@@ -413,11 +490,15 @@
 
                                             if (result.success) {
                                                 console.log('Data updated successfully');
+                                                alert("Datele au fost actualizate cu succes!");
                                             } else {
                                                 console.log('Error updating data:', result.error);
+                                                alert("A aparut o eroare la actualizarea datelor!");
                                             }
                                         } catch (error) {
                                             console.error('Error updating data:', error);
+                                            alert("A aparut o eroare la actualizarea datelor!");
+
                                         }
                                     });
 
