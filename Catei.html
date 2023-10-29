@@ -37,14 +37,14 @@
         }
 
         #data-container li {
-          background-color: white;
-          width: 20%;
-          height: 30em;
-          margin: 0 1em;
-          padding: 1em;
-          box-sizing: border-box;
-          display: inline-block;
-          vertical-align: top;
+            background-color: white;
+            width: 20%;
+            height: 30em;
+            margin: 0 1em;
+            padding: 1em;
+            box-sizing: border-box;
+            display: inline-block;
+            vertical-align: top;
         }
 
         /*dog-image is relative to dog-entry*/
@@ -57,6 +57,7 @@
             width: 15%;
             height: 30em;
             scale: 0.9;
+            cursor: pointer;
         }
 
         /*center on width.dog-id relative to .dog-entry and put at the top of .dog-entry*/
@@ -91,7 +92,6 @@
             height: 25%;
             scale: 1;
         }
-
     </style>
 
 
@@ -368,6 +368,10 @@
                         // Create and populate elements within the section
                         const nameElementDiv = document.createElement('div');
                         nameElementDiv.className = 'dog-entry';
+                        // create a refference to another page
+                        nameElementDiv.onclick = function () {
+                            window.location.href = "dog_template.html?id=" + item.id;
+                        };
 
                         const nameElementId = document.createElement('p');
                         nameElementId.className = 'dog-id';
