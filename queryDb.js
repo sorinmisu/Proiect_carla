@@ -102,6 +102,26 @@ app.post('/insertData', async (req, res) => {
   }
 });
 
+//create a function that will be called when I click the login button on the html page
+app.post('/login', async (req, res) => {
+  try {
+    const connection = await mysql.createConnection(dbConfig);
+    const selectQuery = 'SELECT * FROM useri WHERE (username = ? OR email = ?) AND parola = ?';
+    const [rows, fields] = await connection.execute(selectQuery, [req.body.username, req.body.username, req.body.password]);
+    connection.end();
+
+    if (rows.length === 0) {
+      // Send an error response if the username or email and password are incorrect
+      res.status(401).json({ error: 'Invalid username or email and password' });
+    } else {
+      // Send the data as a JSON response if the username or email and password are correct
+      res.json(rows);
+    }
+  } catch (error) {
+    console.error('Error selecting data:', error);
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
