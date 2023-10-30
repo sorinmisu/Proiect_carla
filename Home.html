@@ -45,6 +45,8 @@
   <meta name="theme-color" content="#478ac9">
   <link rel="canonical" href="index.html">
   <meta property="og:url" content="index.html">
+
+
 </head>
 
 <!-- <style>
@@ -90,6 +92,15 @@
     color: #ffcc00;
     /* Change the color on hover */
   }
+
+  .hoverable {
+    transition: background-color 0.3s ease;
+  }
+
+  .hoverable:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Change this to the color you want */
+  }
 </style>
 
 
@@ -97,9 +108,6 @@
   <header class="u-clearfix u-header u-image u-image-tiles u-shading u-header" id="sec-077f" data-image-width="564"
     data-image-height="732">
     <div class="u-clearfix u-sheet u-sheet-1">
-
-
-
       <nav class="u-menu u-menu-dropdown u-offcanvas u-offcanvas-shift u-menu-1" data-responsive-from="XL">
         <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
           <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base u-text-palette-3-light-1"
@@ -140,6 +148,9 @@
                 class="u-button-style u-nav-link u-text-active-palette-3-base u-text-grey-90 u-text-hover-grey-90"
                 href="Intrebari-frecvente.html" style="padding: 10px 0px;">Întrebări frecvente</a>
             </li>
+            <li class="u-nav-item autentificare"><a class="u-button-style u-nav-link" href="login.html"
+                style="padding: 10px 0px;">Autentificare</a>
+            </li>
           </ul>
         </div>
         <div class="u-custom-menu u-nav-container-collapse">
@@ -163,6 +174,9 @@
                 <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Intrebari-frecvente.html"
                     style="padding: 10px 0px;">Întrebări frecvente</a>
                 </li>
+                <li class="u-nav-item autentificare" style="display: block;"><a class="u-button-style u-nav-link"
+                    href="login.html" style="padding: 10px 0px;">Autentificare</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -170,17 +184,61 @@
         </div>
       </nav>
 
+
+      <script>
+        // Get the Autentificare and Deconectare elements
+        const autentificareElements = document.querySelectorAll('.autentificare');
+
+        // Get the Manager Catei element
+        const managerCateiElements = document.querySelectorAll('.manager-catei');
+
+        // Send a GET request to the /getLoginStatus endpoint to update the loggedIn variable
+        async function updateLoggedIn() {
+          // Define the loggedIn variable
+          let loggedIn = -2;
+          const response = await fetch('/getLoginStatus');
+          const { login_status, username } = await response.json();
+          loggedIn = login_status;
+          console.log(loggedIn);
+
+          if (loggedIn > -1) {
+            const userName = document.getElementById('user-name');
+
+            userName.textContent = username;
+
+            autentificareElements.forEach(element => {
+              element.textContent = 'Deconectare';
+              // Add a click event listener to each element
+              element.addEventListener('click', async () => {
+                const response = await fetch('/logout');
+                const loginStatus = await response.json();
+                console.log(loginStatus);
+                loggedIn = loginStatus.login_status;
+                location.reload();
+              });
+              element.style.cursor = 'pointer';
+              element.classList.add('hoverable');
+            });
+          }
+        }
+
+        // Call the updateLoggedIn function when the page is loaded
+        window.addEventListener('load', updateLoggedIn);
+
+      </script>
+
+
       <i class="fas fa-user" id="user-icon"></i>
-      <span class="text_user_name" id="user-name">John Doe</span>
-      
+      <span class="text_user_name" id="user-name">Neautentificat</span>
+
       <script>
         const userIcon = document.getElementById('user-icon');
         const userName = document.getElementById('user-name');
-      
+
         userIcon.addEventListener('click', () => {
           window.location.href = 'Login.html';
         });
-      
+
         userName.addEventListener('click', () => {
           window.location.href = 'Login.html';
         });

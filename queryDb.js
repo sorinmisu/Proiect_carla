@@ -5,6 +5,7 @@ const port = 3000
 app.use(express.json());
 
 let login_status = -1;
+let username = '';
 
 // Replace these with your MariaDB connection details
 const dbConfig = {
@@ -111,9 +112,10 @@ app.post('/login', async (req, res) => {
     const [rows, fields] = await connection.execute(selectQuery, [req.body.username, req.body.username, req.body.password]);
     connection.end();
 
-    if(rows.length === 1){
+    if (rows.length === 1) {
       //get tip_cont from the database and save it in login_status
       login_status = rows[0].tip_cont;
+      username = rows[0].username;
     }
     else {
       // Send the data as a JSON response if the username or email and password are correct
@@ -136,6 +138,12 @@ app.post('/login', async (req, res) => {
 
 //make a function that will return the login_status variable
 app.get('/getLoginStatus', async (req, res) => {
+  res.json({ login_status, username });
+});
+
+//make a function that will set login_status variable to -1
+app.get('/logout', async (req, res) => {
+  login_status = -1;
   res.json(login_status);
 });
 
