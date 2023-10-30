@@ -246,6 +246,32 @@
                             element.classList.add('hoverable');
                         });
                     }
+
+                    if (loggedIn === 99) {
+                        const userIcon = document.getElementById('user-icon');
+                        const userName = document.getElementById('user-name');
+
+                        userIcon.addEventListener('click', () => {
+                            window.location.href = 'manager_catei.html';
+                        });
+
+                        userName.addEventListener('click', () => {
+                            window.location.href = 'manager_catei.html';
+                        });
+                    }
+                    else {
+                        const userIcon = document.getElementById('user-icon');
+                        const userName = document.getElementById('user-name');
+
+                        userIcon.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+
+                        userName.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+                    }
+
                 }
 
                 // Call the updateLoggedIn function when the page is loaded
@@ -254,7 +280,7 @@
             </script>
 
             <i class="fas fa-user" id="user-icon"></i>
-            <span class="text_user_name" id="user-name">John Doe</span>
+            <span class="text_user_name" id="user-name">Neautentificat</span>
 
 
             <h1 class="u-text u-text-1">

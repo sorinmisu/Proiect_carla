@@ -215,47 +215,73 @@
             <script>
                 // Get the Autentificare and Deconectare elements
                 const autentificareElements = document.querySelectorAll('.autentificare');
-        
+
                 // Get the Manager Catei element
                 const managerCateiElements = document.querySelectorAll('.manager-catei');
-        
+
                 // Send a GET request to the /getLoginStatus endpoint to update the loggedIn variable
                 async function updateLoggedIn() {
-                  // Define the loggedIn variable
-                  let loggedIn = -2;
-                  const response = await fetch('/getLoginStatus');
-                  const { login_status, username } = await response.json();
-                  loggedIn = login_status;
-                  console.log(loggedIn);
-        
-                  if (loggedIn > -1) {
-                    const userName = document.getElementById('user-name');
-        
-                    userName.textContent = username;
-        
-                    autentificareElements.forEach(element => {
-                      element.textContent = 'Deconectare';
-                      // Add a click event listener to each element
-                      element.addEventListener('click', async () => {
-                        const response = await fetch('/logout');
-                        const loginStatus = await response.json();
-                        console.log(loginStatus);
-                        loggedIn = loginStatus.login_status;
-                        location.reload();
-                      });
-                      element.style.cursor = 'pointer';
-                      element.classList.add('hoverable');
-                    });
-                  }
+                    // Define the loggedIn variable
+                    let loggedIn = -2;
+                    const response = await fetch('/getLoginStatus');
+                    const { login_status, username } = await response.json();
+                    loggedIn = login_status;
+                    console.log(loggedIn);
+
+                    if (loggedIn > -1) {
+                        const userName = document.getElementById('user-name');
+
+                        userName.textContent = username;
+
+                        autentificareElements.forEach(element => {
+                            element.textContent = 'Deconectare';
+                            // Add a click event listener to each element
+                            element.addEventListener('click', async () => {
+                                const response = await fetch('/logout');
+                                const loginStatus = await response.json();
+                                console.log(loginStatus);
+                                loggedIn = loginStatus.login_status;
+                                location.reload();
+                            });
+                            element.style.cursor = 'pointer';
+                            element.classList.add('hoverable');
+                        });
+                    }
+
+                    if (loggedIn === 99) {
+                        const userIcon = document.getElementById('user-icon');
+                        const userName = document.getElementById('user-name');
+
+                        userIcon.addEventListener('click', () => {
+                            window.location.href = 'manager_catei.html';
+                        });
+
+                        userName.addEventListener('click', () => {
+                            window.location.href = 'manager_catei.html';
+                        });
+                    }
+                    else {
+                        const userIcon = document.getElementById('user-icon');
+                        const userName = document.getElementById('user-name');
+
+                        userIcon.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+
+                        userName.addEventListener('click', () => {
+                            window.location.href = 'login.html';
+                        });
+                    }
+
                 }
-        
+
                 // Call the updateLoggedIn function when the page is loaded
                 window.addEventListener('load', updateLoggedIn);
-        
-              </script>
-              
+
+            </script>
+
             <i class="fas fa-user" id="user-icon"></i>
-            <span class="text_user_name" id="user-name">John Doe</span>
+            <span class="text_user_name" id="user-name">Neautentificat</span>
 
             <h1 class="u-text u-text-1">
                 <a class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-3-light-3 u-btn-1"
