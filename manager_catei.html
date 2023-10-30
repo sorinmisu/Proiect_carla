@@ -18,6 +18,7 @@
     <link id="u-page-google-font" rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
     <script type="application/ld+json">{
 		"@context": "http://schema.org",
@@ -83,6 +84,53 @@
             background-color: #478ac9;
             text-decoration: none;
         }
+
+        .fas {
+            font-size: 28px;
+            /* Adjust the size as needed */
+            color: #ffffff;
+            /* Change the color to match your design */
+            margin-left: calc(100% - 8em);
+            /* Adjust the margin to position the icon */
+            margin-top: -60px;
+            margin-right: 10px;
+        }
+
+        .text_user_name {
+            display: inline-block;
+            vertical-align: middle;
+            /* Adjust the vertical alignment as needed */
+        }
+
+        .fas,
+        .text_user_name {
+            cursor: pointer;
+            /* Change the cursor to a pointer on hover */
+            transition: color 0.2s ease-in-out;
+            /* Add a smooth color transition on hover */
+        }
+
+        .fas:hover,
+        .text_user_name:hover {
+            color: #ffcc00;
+            /* Change the color on hover */
+        }
+
+        .success-message {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #d4edda;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .success-message p {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #155724;
+        }
     </style>
 </head>
 
@@ -125,11 +173,10 @@
                         </li>
                         <li class="u-nav-item"><a
                                 class="u-button-style u-nav-link u-text-active-palette-3-base u-text-grey-90 u-text-hover-grey-90"
-                                href="Galerie.html" style="padding: 10px 0px;">Galerie</a>
-                        </li>
-                        <li class="u-nav-item"><a
-                                class="u-button-style u-nav-link u-text-active-palette-3-base u-text-grey-90 u-text-hover-grey-90"
                                 href="Intrebari-frecvente.html" style="padding: 10px 0px;">Întrebări frecvente</a>
+                        </li>
+                        <li class="u-nav-item autentificare"><a class="u-button-style u-nav-link" href="login.html"
+                                style="padding: 10px 0px;">Autentificare</a>
                         </li>
                     </ul>
                 </div>
@@ -149,12 +196,13 @@
                                 <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Despre-noi.html"
                                         style="padding: 10px 0px;">Despre noi</a>
                                 </li>
-                                <li class="u-nav-item"><a class="u-button-style u-nav-link" href="Galerie.html"
-                                        style="padding: 10px 0px;">Galerie</a>
-                                </li>
                                 <li class="u-nav-item"><a class="u-button-style u-nav-link"
                                         href="Intrebari-frecvente.html" style="padding: 10px 0px;">Întrebări
                                         frecvente</a>
+                                </li>
+                                <li class="u-nav-item autentificare" style="display: block;"><a
+                                        class="u-button-style u-nav-link" href="login.html"
+                                        style="padding: 10px 0px;">Autentificare</a>
                                 </li>
                             </ul>
                         </div>
@@ -162,6 +210,53 @@
                     <div class="u-black u-menu-overlay u-opacity u-opacity-20"></div>
                 </div>
             </nav>
+
+            <script>
+                // Get the Autentificare and Deconectare elements
+                const autentificareElements = document.querySelectorAll('.autentificare');
+
+                // Get the Manager Catei element
+                const managerCateiElements = document.querySelectorAll('.manager-catei');
+
+                // Send a GET request to the /getLoginStatus endpoint to update the loggedIn variable
+                async function updateLoggedIn() {
+                    // Define the loggedIn variable
+                    let loggedIn = -2;
+                    const response = await fetch('/getLoginStatus');
+                    const { login_status, username } = await response.json();
+                    loggedIn = login_status;
+                    console.log(loggedIn);
+
+                    if (loggedIn > -1) {
+                        const userName = document.getElementById('user-name');
+
+                        userName.textContent = username;
+
+                        autentificareElements.forEach(element => {
+                            element.textContent = 'Deconectare';
+                            // Add a click event listener to each element
+                            element.addEventListener('click', async () => {
+                                const response = await fetch('/logout');
+                                const loginStatus = await response.json();
+                                console.log(loginStatus);
+                                loggedIn = loginStatus.login_status;
+                                location.reload();
+                            });
+                            element.style.cursor = 'pointer';
+                            element.classList.add('hoverable');
+                        });
+                    }
+                }
+
+                // Call the updateLoggedIn function when the page is loaded
+                window.addEventListener('load', updateLoggedIn);
+
+            </script>
+
+            <i class="fas fa-user" id="user-icon"></i>
+            <span class="text_user_name" id="user-name">John Doe</span>
+
+
             <h1 class="u-text u-text-1">
                 <a class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-3-light-3 u-btn-1"
                     href="Home.html" data-page-id="333927734">Lucky</a>
