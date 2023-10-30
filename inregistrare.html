@@ -69,8 +69,7 @@
         box-sizing: border-box;
     }
 
-    .login-form button[type="submit"],
-    .login-form button[type="button"] {
+    .login-form button[type="submit"] {
         display: block;
         margin: 20px auto 0;
         background-color: #007bff;
@@ -85,35 +84,10 @@
         background-color: #0069d9;
     }
 
-    .fas {
-        font-size: 28px;
-        /* Adjust the size as needed */
-        color: #ffffff;
-        /* Change the color to match your design */
-        margin-left: calc(100% - 8em);
-        /* Adjust the margin to position the icon */
-        margin-top: -60px;
-        margin-right: 10px;
-    }
-
-    .text_user_name {
-        display: inline-block;
-        vertical-align: middle;
-        /* Adjust the vertical alignment as needed */
-    }
-
-    .fas,
-    .text_user_name {
-        cursor: pointer;
-        /* Change the cursor to a pointer on hover */
-        transition: color 0.2s ease-in-out;
-        /* Add a smooth color transition on hover */
-    }
-
-    .fas:hover,
-    .text_user_name:hover {
-        color: #ffcc00;
-        /* Change the color on hover */
+    .login-form p#error-message {
+        color: red;
+        display: none;
+        margin-top: 1em;
     }
 
     .success-message {
@@ -210,10 +184,6 @@
                     <div class="u-black u-menu-overlay u-opacity u-opacity-20"></div>
                 </div>
             </nav>
-
-            <i class="fas fa-user" id="user-icon"></i>
-            <span class="text_user_name" id="user-name">John Doe</span>
-
             <h1 class="u-text u-text-1">
                 <a class="u-active-none u-border-none u-btn u-button-link u-button-style u-hover-none u-none u-text-palette-3-light-3 u-btn-1"
                     href="Home.html" data-page-id="333927734">Lucky</a>
@@ -230,71 +200,66 @@
 
     <section>
         <div class="login-form">
-            <h2>Autentificare</h2>
-            <form>
-                <label for="username">Nume utilizator sau Email:</label>
+            <h2>Inregistrare</h2>
+            <form id="register-form">
+                <label for="username">Nume utilizator</label>
                 <input type="text" id="username" name="username" required>
 
-                <label for="password">Parola:</label>
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+
+                <label for="password">Parola</label>
                 <input type="password" id="password" name="password" required>
 
-                <button type="submit" id="login-button">Autentificare</button>
-                <button type="button" onclick="window.location.href='inregistrare.html'">Inregistrare</button>
-
-                <p id="login-error" style="color: red; display: none;">Nume utilizator sau parola incorecta.</p>
-
-                <div class="success-message" style="display: none;">
-                    <p>Inregistrarea a fost efectuata cu succes!</p>
-                </div>
-
+                <button type="submit" id="register-button">Inregistrare</button>
             </form>
+        </div>
+        <div class="success-message" style="display: none;">
+            <p>Inregistrarea a fost efectuata cu succes!</p>
         </div>
     </section>
 
     <script>
-        const loginButton = document.getElementById('login-button');
-
         const registerForm = document.getElementById('register-form');
         const registerButton = document.getElementById('register-button');
         const loginForm = document.querySelector('.login-form');
         const successMessage = document.querySelector('.success-message');
 
-
-        loginButton.addEventListener('click', async (event) => {
+        registerButton.addEventListener('click', async (event) => {
             event.preventDefault(); // Prevent the form from submitting
 
             try {
-                const response = await fetch('/login', {
+                const response = await fetch('/register', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         username: document.getElementById('username').value,
+                        email: document.getElementById('email').value,
                         password: document.getElementById('password').value
                     })
                 });
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log('Login successful:', data);
-
-                    window.location.href = '/home.html';
+                    console.log('Registration successful:', data);
+                    // Hide the login form and show the success message
+                    loginForm.style.display = 'none';
+                    successMessage.style.display = 'block';
                 } else {
                     const errorData = await response.json();
-                    console.error('Login failed:', errorData);
+                    console.error('Registration failed:', errorData);
                     // Display an error message to the user
-                    document.getElementById('login-error').style.display = 'block';
+                    alert('An error occurred while registering the user');
                 }
             } catch (error) {
                 console.error('An error occurred:', error);
                 // Display an error message to the user
-                document.getElementById('login-error').style.display = 'block';
+                alert('An error occurred while registering the user');
             }
         });
-
     </script>
-
 
 
     <footer class="u-clearfix u-footer u-image u-image-tiles u-shading u-footer" id="sec-ecd9" data-image-width="564"
